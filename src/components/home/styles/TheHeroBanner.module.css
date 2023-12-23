@@ -1,0 +1,18 @@
+.bar_1 {
+    position: absolute;
+    height: 1200px;
+    width: 150px;
+    background-color: #989990;
+    transform: rotate(45deg);
+    z-index: -1;
+    top: -250px;
+}
+.bar_2 {
+    position: absolute;
+    height: 1200px;
+    width: 150px;
+    background-color: #5E6052;
+    transform: rotate(45deg);
+    z-index: -1;
+    bottom: -80px;
+}

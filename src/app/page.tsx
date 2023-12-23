@@ -1,9 +1,9 @@
-import Image from 'next/image'
+import TheHeroBanner from "@/components/home/TheHeroBanner";
 
 export default function Home() {
   return (
-    <main>
-      Hello h
+    <main className='h-screen flex justify-center items-center'>
+      <TheHeroBanner />
     </main>
   )
 }
