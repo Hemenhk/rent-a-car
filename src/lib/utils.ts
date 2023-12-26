@@ -12,3 +12,4 @@ export const links = [
   { href: "/about", name: "About" },
   { href: "/faq", name: "Faq" },
 ];
+
