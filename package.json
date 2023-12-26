@@ -11,13 +11,17 @@
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
-    "@tanstack/react-query": "^5.14.2",
+    "@tanstack/react-query": "^5.15.0",
+    "axios": "^1.6.2",
+    "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "embla-carousel-react": "^8.0.0-rc17",
     "lodash": "^4.17.21",
     "lucide-react": "^0.299.0",
+    "mongoose": "^8.0.3",
     "next": "14.0.4",
+    "next-auth": "^4.24.5",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^4.12.0",
@@ -25,6 +29,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

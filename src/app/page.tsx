@@ -27,10 +27,10 @@ export default function Home() {
         <div className="relative flex justify-center top-20 pl-10 md:pl-0 md:left-0 md:top-6 overflow-hidden">
         <TheHeroBanner />
         </div>
-        <div className="relative top-24 right-4 flex md:hidden w-[60%] mx-auto pl-10">
+        <div className="relative top-10 right-2 px-5 flex md:hidden w-[60%] mx-auto pl-10">
           <TheBrandCarousel />
         </div>
-        <div className="hidden md:flex justify-center relative top-32">
+        <div className="hidden md:flex justify-center relative top-12">
           <TheBrands />
         </div>
       </div>
