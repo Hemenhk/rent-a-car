@@ -1,13 +1,7 @@
 import Link from "next/link";
 import React from "react";
 
-const links = [
-  { href: "/", name: "Home" },
-  { href: "/cars", name: "Cars" },
-  { href: "/pricing", name: "Pricing" },
-  { href: "/about", name: "About" },
-  { href: "/faq", name: "Faq" },
-];
+import { links } from "@/lib/utils";
 
 type TLinks = {
   href: string;
