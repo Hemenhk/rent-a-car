@@ -14,16 +14,16 @@ export default function TheHeader() {
       {homePage ? (
         <header className="w-full h-10 py-10">
           <div className="flex md:hidden">
-            <TheMobileNavbar />
+            <TheMobileNavbar homePage={homePage} />
           </div>
           <div className="hidden md:flex">
             <TheNavbar homePage={homePage} />
           </div>
         </header>
       ) : (
-        <header className="w-full h-10 py-10">
+        <header className="w-full h-10 py-5">
           <div className="flex md:hidden">
-            <TheMobileNavbar />
+            <TheMobileNavbar homePage={homePage}/>
           </div>
           <div className="hidden md:flex">
             <TheNavbar homePage={homePage} />
