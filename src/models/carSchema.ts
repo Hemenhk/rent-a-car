@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, Model, mongo } from "mongoose";
+import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface CarDocument extends Document {
   title: string;
@@ -21,7 +21,7 @@ const carSchema = new Schema(
     },
     manufacturer: {
       type: String,
-      required: [true, "A car must have a title"],
+      required: [true, "A car must have a manufacturer"],
       trim: true,
       maxLength: [100, "A car must have less than 500 characters"],
       minLength: [1, "A car must have at least 1 character"],
@@ -37,7 +37,7 @@ const carSchema = new Schema(
     },
     isAvailable: {
       type: Boolean,
-      required: [true, "A car must be either available or not"],
+      default: true
     },
     imageCover: {
       type: String,

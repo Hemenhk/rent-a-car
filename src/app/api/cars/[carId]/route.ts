@@ -4,22 +4,22 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { treatmentId: string } }
+  { params }: { params: { carId: string } }
 ) {
   try {
     await connectToDatabase();
 
-    const id = params.treatmentId;
-    const product = await Car.findById(id);
+    const id = params.carId;
+    const car = await Car.findById(id);
 
-    if (!product) {
+    if (!car) {
       throw new Error("Document not found");
     }
 
     return NextResponse.json({
       status: 200,
       success: true,
-      product: product,
+      car: car,
     });
   } catch (error: any) {
     return NextResponse.json({
@@ -34,12 +34,12 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { treatmentId: string } }
+  { params }: { params: { carId: string } }
 ) {
   try {
     await connectToDatabase();
 
-    const id = params.treatmentId;
+    const id = params.carId;
     const reqBody = await req.json();
 
     const title: string = reqBody.title;
@@ -47,7 +47,7 @@ export async function PATCH(
     const price: string = reqBody.price;
     const imageCover: string = reqBody.imageCover;
 
-    const treatmentValues = await Car.findByIdAndUpdate(id, reqBody, {
+    const carValues = await Car.findByIdAndUpdate(id, reqBody, {
       new: true,
       runValidators: true,
     });
@@ -56,7 +56,7 @@ export async function PATCH(
       status: 200,
       success: true,
       data: {
-        treatment: treatmentValues,
+        car: carValues,
       },
     });
   } catch (error: any) {
@@ -72,19 +72,19 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { treatmentId: string } }
+  { params }: { params: { carId: string } }
 ) {
   try {
     await connectToDatabase();
 
-    const id = params.treatmentId;
-    const deletedTreatment = await Car.findByIdAndDelete(id);
+    const id = params.carId;
+    const deletedCar = await Car.findByIdAndDelete(id);
 
-    if (!deletedTreatment) {
+    if (!deletedCar) {
       return NextResponse.json({
         status: 404,
         success: false,
-        error: "Treatment not found",
+        error: "Car was not found",
       });
     }
 
@@ -92,7 +92,7 @@ export async function DELETE(
       status: 200,
       success: true,
       data: {
-        message: "Treatment deleted successfully",
+        message: "Car was deleted successfully",
       },
     });
   } catch (error: any) {

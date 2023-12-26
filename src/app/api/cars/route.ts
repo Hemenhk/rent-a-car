@@ -8,21 +8,23 @@ export async function POST(req: NextRequest) {
     await connectToDatabase();
 
     const reqBody = await req.json();
-    const { imageCover, price, description, title } = reqBody;
+    const { imageCover, price, description, title, manufacturer, isAvailable } = reqBody;
 
-    const newTreatment = new Car({
+    const newCar = new Car({
       title,
+      manufacturer,
+      isAvailable,
       description,
       price,
       imageCover,
     });
-    await newTreatment.save();
+    await newCar.save();
 
     return NextResponse.json({
       status: 200,
       success: true,
       data: {
-        treatments: newTreatment,
+        cars: newCar,
       },
     });
   } catch (error: any) {
@@ -39,16 +41,16 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   try {
     await connectToDatabase();
-    const product = await Car.find();
+    const cars = await Car.find();
 
-    if (!product) {
+    if (!cars) {
       throw new Error("Document not found");
     }
 
     return NextResponse.json({
       status: 200,
       success: true,
-      product: product,
+      cars: cars,
     });
   } catch (error: any) {
     return NextResponse.json({
