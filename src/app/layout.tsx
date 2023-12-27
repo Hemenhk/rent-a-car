@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import TheHeader from "@/components/header/TheHeader";
 import ReactQueryProvider from "./context/tanstack-client";
+import NextAuthProvider from "./context/next-auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,10 +20,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ReactQueryProvider>
-          <TheHeader />
-          {children}
-        </ReactQueryProvider>
+        <NextAuthProvider>
+          <ReactQueryProvider>
+            <TheHeader />
+            {children}
+          </ReactQueryProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );
