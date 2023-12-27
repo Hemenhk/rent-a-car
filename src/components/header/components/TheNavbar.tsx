@@ -1,6 +1,7 @@
 import React from "react";
 import TheNavLinks from "./navlinks/TheNavLinks";
 import { Button } from "@/components/ui/button";
+import TheAuthDialog from "@/components/auth/TheAuthDialog";
 
 type TNavBar = {
   homePage: boolean;
@@ -18,8 +19,9 @@ export default function TheNavbar({ homePage }: TNavBar) {
           homePage && "relative left-20 bottom-5 "
         } rounded-b-3xl`}
       >
-        <Button>sign in</Button>
-        <Button>sign up</Button>
+        <TheAuthDialog />
+        {/* <Button>sign in</Button>
+        <Button>sign up</Button> */}
       </div>
     </div>
   );
