@@ -60,7 +60,7 @@ export default function TheSignUpDialog() {
       control={form.control}
       name={sign.htmlFor as "email" | "password" | "confirmPassword"}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="pt-3">
           <FormLabel>{sign.label}</FormLabel>
           <FormControl>
             <Input type={sign.type} placeholder={sign.placeholder} {...field} />
@@ -94,7 +94,7 @@ export default function TheSignUpDialog() {
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           {mappedForm}
           <CardFooter className="mt-3">
-            <Button type="submit" className="text-white">
+            <Button type="submit" className="w-full">
               Create account
             </Button>
           </CardFooter>

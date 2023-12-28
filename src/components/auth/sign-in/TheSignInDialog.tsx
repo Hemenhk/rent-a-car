@@ -36,7 +36,6 @@ const formSchema = z.object({
 });
 
 export default function TheSignInDialog() {
-  const { data: session } = useSession();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -86,7 +85,7 @@ export default function TheSignInDialog() {
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           {mappedForm}
           <CardFooter className="mt-3">
-            <Button type="submit" className="text-white">
+            <Button type="submit" className="w-full">
               Sign In
             </Button>
           </CardFooter>

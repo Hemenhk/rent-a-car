@@ -1,13 +1,15 @@
 import React from "react";
 import TheNavLinks from "./navlinks/TheNavLinks";
-import { Button } from "@/components/ui/button";
 import TheAuthDialog from "@/components/auth/TheAuthDialog";
+import { useSession } from "next-auth/react";
+import TheAdminButtons from "./auth-buttons/TheAdminButtons";
 
 type TNavBar = {
   homePage: boolean;
 };
 
 export default function TheNavbar({ homePage }: TNavBar) {
+  const { data: adminSession } = useSession();
   return (
     <div
       className={`flex justify-between items-center ${
@@ -20,7 +22,11 @@ export default function TheNavbar({ homePage }: TNavBar) {
       <nav className={`${homePage ? "text-white" : "text-black"}`}>
         <TheNavLinks />
       </nav>
-      <TheAuthDialog />
+      {adminSession ? (
+        <TheAdminButtons />
+      ) : (
+        <TheAuthDialog />
+      )}
     </div>
   );
 }
