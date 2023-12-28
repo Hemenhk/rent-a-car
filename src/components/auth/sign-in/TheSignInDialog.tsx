@@ -1,5 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { CardFooter } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { FaCircleCheck } from "react-icons/fa6";
+import { MdError } from "react-icons/md";
 import {
   DialogDescription,
   DialogHeader,
@@ -22,6 +25,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { signIn, useSession } from "next-auth/react";
+import { useState } from "react";
 
 const formSchema = z.object({
   email: z.string().min(2, {
@@ -36,6 +40,8 @@ const formSchema = z.object({
 });
 
 export default function TheSignInDialog() {
+  const [error, setError] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,17 +70,32 @@ export default function TheSignInDialog() {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      setSubmitting(true);
       const res = await signIn("credentials", {
         email: values.email,
         password: values.password,
         redirect: false,
       });
-      console.log(res);
-      console.log({ res });
+      if (res?.error) {
+        setError(true);
+      }
+      // console.log(res);
+      // console.log({ res });
     } catch (error) {
       console.log(error);
+      setError(true);
+    } finally {
+      setSubmitting(false);
     }
   };
+
+  const renderErrorAlert = (
+    <Alert variant={"destructive"} className="h-12">
+      <MdError />
+      <AlertTitle>Failed to sign in!</AlertTitle>
+    </Alert>
+  );
+
   return (
     <>
       <DialogHeader className="py-4">
@@ -84,10 +105,11 @@ export default function TheSignInDialog() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           {mappedForm}
-          <CardFooter className="mt-3">
-            <Button type="submit" className="w-full">
+          <CardFooter className="mt-3 flex flex-col gap-3">
+            <Button type="submit" className="w-full" disabled={submitting}>
               Sign In
             </Button>
+            {error && renderErrorAlert}
           </CardFooter>
         </form>
       </Form>
