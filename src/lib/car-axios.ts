@@ -22,3 +22,12 @@ export const fetchAllCars = async () => {
     console.log(error);
   }
 };
+
+export const postCar =async (data: CarValue ) => {
+  try {
+    const res = await axios.post("/api/cars", data)
+    console.log("car was created",res)
+  } catch (error) {
+    console.log(error)
+  }
+}

@@ -73,6 +73,6 @@ export const carRentalForm = [
     label: "Availability",
     type: "radio",
     placeholder: "Availability",
-    name: "manufacturer",
+    name: "available",
   },
 ];
