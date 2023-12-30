@@ -69,10 +69,10 @@ export const carRentalForm = [
     name: "price",
   },
   {
-    id: "available",
+    id: "isAvailable",
     label: "Availability",
     type: "radio",
     placeholder: "Availability",
-    name: "available",
+    name: "isAvailable",
   },
 ];

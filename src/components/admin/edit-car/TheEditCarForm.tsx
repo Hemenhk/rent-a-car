@@ -29,22 +29,32 @@ import { Switch } from "@/components/ui/switch";
 import { carRentalForm } from "@/utils/form-utils";
 import { FormProps } from "@/utils/types/types";
 
-import { postFormSchema } from "@/utils/form-schemas/form-schemas";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CarValue, postCar } from "@/lib/car-axios";
+import {
+  editFormSchema,
+  postFormSchema,
+} from "@/utils/form-schemas/form-schemas";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { CarValue, fetchCarById, postCar, updateCar } from "@/lib/car-axios";
 import { useRouter } from "next/navigation";
 
-export default function ThePostCarForm() {
+export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
   const router = useRouter();
   const queryClient = useQueryClient();
+
+  const {data: carData, isLoading} = useQuery({
+    queryKey: ["cars"],
+    queryFn: () => fetchCarById(editCarId),
+  });
+
+
   const {
-    mutateAsync: createCarMutation,
+    mutateAsync: updateMutation,
     isPaused,
     isSuccess,
     isError,
   } = useMutation({
     mutationFn: async (data: CarValue) => {
-      postCar(data);
+      updateCar(data, editCarId);
     },
     onSuccess: (data) => {
       queryClient.setQueryData(["cars"], data);
@@ -52,14 +62,14 @@ export default function ThePostCarForm() {
     },
   });
 
-  const form = useForm<z.infer<typeof postFormSchema>>({
-    resolver: zodResolver(postFormSchema),
-    defaultValues: {
-      title: "",
-      manufacturer: "",
-      description: "",
-      price: "",
-      isAvailable: false,
+  const form = useForm<z.infer<typeof editFormSchema>>({
+    resolver: zodResolver(editFormSchema),
+    values: {
+      title: carData?.title || "",
+      manufacturer: carData?.manufacturer ||"",
+      description:carData?.description || "",
+      price: carData?.price?.toString() || "",
+      isAvailable: carData?.isAvailable || false
     },
   });
 
@@ -93,31 +103,35 @@ export default function ThePostCarForm() {
     try {
       const { description, manufacturer, price, title, isAvailable } = values;
       const numericPrice = parseFloat(price);
-      await createCarMutation({
+      await updateMutation({
         description,
         manufacturer,
         price: numericPrice,
         title,
-        isAvailable,
+        isAvailable: isAvailable
       });
-      setTimeout(() => {
-        router.push("/cars");
-      }, 1500);
+      // setTimeout(() => {
+      //   router.push("/cars");
+      // }, 1500);
     } catch (error) {
       console.log("could not create car", error);
     }
   };
+
+  if (isLoading) {
+    return <p>Loading...</p>
+  }
   return (
     <Card className="w-[400px]">
       <CardHeader>
-        <CardTitle>Post A Car</CardTitle>
-        <CardDescription>Post a car you wish to rent out.</CardDescription>
+        <CardTitle>Edit A Car</CardTitle>
+        <CardDescription>Edit a car you wish to rent out.</CardDescription>
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <CardContent className="px-5">{mappedForm}</CardContent>
           <CardFooter className="flex gap-3 pl-5 pb-5">
-            <Button type="submit">Create</Button>
+            <Button type="submit">Edit</Button>
             <Button>Cancel</Button>
           </CardFooter>
         </form>

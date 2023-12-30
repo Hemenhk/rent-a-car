@@ -8,7 +8,7 @@ export default function AdminDashboardLayout({
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="absolute left-6 top-32">
-        <TheToolbar />
+        {/* <TheToolbar /> */}
       </div>
       <section className="flex justify-center items-center">{children}</section>
     </div>
