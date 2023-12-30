@@ -7,7 +7,7 @@ import { IoTrashOutline } from "react-icons/io5";
 export default function TheDeleteCar({ carId }: { carId: string }) {
   const queryClient = useQueryClient();
 
-  const { mutateAsync: deleteCarMutation } = useMutation({
+  const { mutateAsync: deleteCarMutation, isSuccess, isError } = useMutation({
     mutationKey: ["cars"],
     mutationFn: async () => {
       await deleteCar(carId);

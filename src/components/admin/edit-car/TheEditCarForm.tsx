@@ -25,32 +25,35 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { Alert, AlertTitle } from "@/components/ui/alert";
+import { FaCircleCheck } from "react-icons/fa6";
+import { MdError } from "react-icons/md";
 
 import { carRentalForm } from "@/utils/form-utils";
 import { FormProps } from "@/utils/types/types";
+import { MoonLoader } from "react-spinners";
 
 import {
   editFormSchema,
   postFormSchema,
 } from "@/utils/form-schemas/form-schemas";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CarValue, fetchCarById, postCar, updateCar } from "@/lib/car-axios";
+import { CarValue, fetchCarById, updateCar } from "@/lib/car-axios";
 import { useRouter } from "next/navigation";
 
 export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const {data: carData, isLoading} = useQuery({
+  const { data: carData, isLoading } = useQuery({
     queryKey: ["cars"],
     queryFn: () => fetchCarById(editCarId),
   });
 
-
   const {
     mutateAsync: updateMutation,
-    isPaused,
     isSuccess,
+    isPending,
     isError,
   } = useMutation({
     mutationFn: async (data: CarValue) => {
@@ -66,10 +69,10 @@ export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
     resolver: zodResolver(editFormSchema),
     values: {
       title: carData?.title || "",
-      manufacturer: carData?.manufacturer ||"",
-      description:carData?.description || "",
+      manufacturer: carData?.manufacturer || "",
+      description: carData?.description || "",
       price: carData?.price?.toString() || "",
-      isAvailable: carData?.isAvailable || false
+      isAvailable: carData?.isAvailable || false,
     },
   });
 
@@ -79,7 +82,7 @@ export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
       control={form.control}
       name={car.name as "title" | "manufacturer" | "description"}
       render={({ field }) => (
-        <FormItem className="pb-2">
+        <FormItem className="py-2 flex flex-col">
           <FormLabel>{car.label}</FormLabel>
           <FormControl>
             {car.type === "text" || car.type === "number" ? (
@@ -108,19 +111,33 @@ export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
         manufacturer,
         price: numericPrice,
         title,
-        isAvailable: isAvailable
+        isAvailable: isAvailable,
       });
-      // setTimeout(() => {
-      //   router.push("/cars");
-      // }, 1500);
     } catch (error) {
       console.log("could not create car", error);
     }
   };
 
   if (isLoading) {
-    return <p>Loading...</p>
+    return <p>Loading...</p>;
   }
+
+  const successAlert = (
+    <Alert>
+      <AlertTitle className="flex items-center gap-3">
+        <FaCircleCheck />
+        <p>Successfully updated car!</p>
+      </AlertTitle>
+    </Alert>
+  );
+  const errorAlert = (
+    <Alert variant={"destructive"}>
+      <AlertTitle className="flex items-center gap-3">
+        <MdError />
+        <p>Could not update car!</p>
+      </AlertTitle>
+    </Alert>
+  );
   return (
     <Card className="w-[400px]">
       <CardHeader>
@@ -130,9 +147,22 @@ export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <CardContent className="px-5">{mappedForm}</CardContent>
-          <CardFooter className="flex gap-3 pl-5 pb-5">
-            <Button type="submit">Edit</Button>
-            <Button>Cancel</Button>
+          <CardFooter className="flex flex-col items-start gap-3 px-5 pb-5">
+            <div className="flex gap-3 ">
+              <Button type="submit" disabled={isPending}>
+                {isPending ? (
+                  <>
+                    <MoonLoader />
+                    Updating
+                  </>
+                ) : (
+                  "Update"
+                )}
+              </Button>
+              <Button>Cancel</Button>
+            </div>
+            {isError && errorAlert}
+            {isSuccess && successAlert}
           </CardFooter>
         </form>
       </Form>

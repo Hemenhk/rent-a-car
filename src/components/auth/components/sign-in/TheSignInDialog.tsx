@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { CardFooter } from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 import { FaCircleCheck } from "react-icons/fa6";
 import { MdError } from "react-icons/md";
 import {
