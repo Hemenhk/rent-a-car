@@ -6,10 +6,14 @@ import {
 import { SlOptionsVertical } from "react-icons/sl";
 import { IoCreateOutline, IoTrashOutline } from "react-icons/io5";
 import Link from "next/link";
+import TheDeleteCar from "./delete-car/TheDeleteCar";
 
-type PopoverProps = {carId: string}
+type PopoverProps = { carId: string };
 
-export default function ThePopover({carId}: PopoverProps) {
+export default function ThePopover({ carId }: PopoverProps) {
+  const handleCarDelete = async () => {
+
+  };
   return (
     <Popover>
       <PopoverTrigger className="text-violet-950">
@@ -23,7 +27,7 @@ export default function ThePopover({carId}: PopoverProps) {
             </Link>
           </li>
           <li className="flex items-center gap-2">
-            <IoTrashOutline /> delete
+           <TheDeleteCar carId={carId} />
           </li>
         </ul>
       </PopoverContent>

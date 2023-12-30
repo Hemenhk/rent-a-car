@@ -46,13 +46,21 @@ export const postCar = async (data: CarValue) => {
   }
 };
 
-export const updateCar =async (data: CarValue, id: string) => {
+export const updateCar = async (data: CarValue, id: string) => {
   try {
-    const res = await axios.patch<CarValue>(`/api/cars/${id}`, data)
-    console.log("updated car", res)
-    return res
-
+    const res = await axios.patch<CarValue>(`/api/cars/${id}`, data);
+    console.log("updated car", res);
+    return res;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
+
+export const deleteCar = async (id: string) => {
+  try {
+    const res = await axios.delete(`/api/cars/${id}`);
+    console.log("deleted successfully", res);
+  } catch (error) {
+    console.log(error);
+  }
+};
