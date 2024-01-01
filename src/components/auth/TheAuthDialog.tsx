@@ -2,8 +2,8 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "../ui/button";
-import TheSignInDialog from "./sign-in/TheSignInDialog";
-import TheSignUpDialog from "./sign-up/TheSignUpDialog";
+import TheSignInDialog from "./components/sign-in/TheSignInDialog";
+import TheSignUpDialog from "./components/sign-up/TheSignUpDialog";
 
 export default function TheAuthDialog() {
   return (

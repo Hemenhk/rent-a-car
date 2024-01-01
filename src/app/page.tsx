@@ -1,6 +1,6 @@
 import TheHeroBanner from "@/components/home/hero-banner/TheHeroBanner";
 import Image from "next/image";
-import bg from "../assets/images/rent-a-car-bg.png";
+import bg from "../assets/images/rent-a-car-bg.jpg";
 import TheBrandCarousel from "@/components/home/car-brands/TheBrandCarousel";
 import TheBrands from "@/components/home/car-brands/TheBrands";
 
@@ -18,7 +18,7 @@ export default function Home() {
       <Image
         src={bg}
         alt="bg"
-        className="md:px-5 md:pt-5 md:rounded-[3rem] pb-64 z-[-1] brightness-[.50]"
+        className="md:px-5 md:pt-5 md:rounded-[3rem] pb-80 z-[-1] brightness-[.45]"
         objectFit="cover"
         fill
       />

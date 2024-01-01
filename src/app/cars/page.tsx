@@ -38,7 +38,7 @@ export default function AllCarsPage() {
             />
           </Link>
         </CardContent>
-        <CardFooter className="flex flex-col items-start">
+        <CardFooter className="flex flex-col items-start px-3 pb-3">
           <h2 className="uppercase tracking-wider font-medium">{car.title}</h2>
           <h3 className="text-sm text-gray-400">{car.manufacturer}</h3>
           <div className="flex justify-between items-center pt-3 w-full">
@@ -55,5 +55,5 @@ export default function AllCarsPage() {
     </li>
   ));
 
-  return <ul className="flex justify-center items-center h-screen">{mappedCars}</ul>;
+  return <ul className="flex flex-wrap justify-center items-center gap-5 h-screen">{mappedCars}</ul>;
 }
