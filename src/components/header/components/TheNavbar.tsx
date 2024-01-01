@@ -13,7 +13,7 @@ export default function TheNavbar({ homePage }: TNavBar) {
   return (
     <div
       className={`flex justify-between items-center ${
-        homePage ? "pl-14 pr-20" : "px-6 border-b"
+        homePage ? "pl-14 pr-20" : "px-6 py-6 shadow-sm"
       }   w-full text-white`}
     >
       <h1 className={`${homePage ? "text-white" : "text-black"}`}>

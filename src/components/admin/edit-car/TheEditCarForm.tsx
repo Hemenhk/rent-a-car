@@ -1,9 +1,12 @@
 "use client";
 
-import React from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useCarForm } from "@/app/hooks/useCarForm";
+import { useRouter } from "next/navigation";
+
 import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { carFormSchema } from "@/utils/form-schemas/form-schemas";
+import { CarValue, fetchCarById, updateCar } from "@/lib/car-axios";
 
 import {
   Card,
@@ -13,33 +16,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Alert, AlertTitle } from "@/components/ui/alert";
-import { FaCircleCheck } from "react-icons/fa6";
-import { MdError } from "react-icons/md";
-
-import { carRentalForm } from "@/utils/form-utils";
-import { FormProps } from "@/utils/types/types";
 import { MoonLoader } from "react-spinners";
 
-import {
-  editFormSchema,
-  postFormSchema,
-} from "@/utils/form-schemas/form-schemas";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CarValue, fetchCarById, updateCar } from "@/lib/car-axios";
-import { useRouter } from "next/navigation";
+import TheAlert from "@/app/helpers/TheAlert";
 
 export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
   const router = useRouter();
@@ -49,6 +30,8 @@ export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
     queryKey: ["cars"],
     queryFn: () => fetchCarById(editCarId),
   });
+
+  const { form, mappedForm } = useCarForm({ carData });
 
   const {
     mutateAsync: updateMutation,
@@ -65,44 +48,7 @@ export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
     },
   });
 
-  const form = useForm<z.infer<typeof editFormSchema>>({
-    resolver: zodResolver(editFormSchema),
-    values: {
-      title: carData?.title || "",
-      manufacturer: carData?.manufacturer || "",
-      description: carData?.description || "",
-      price: carData?.price?.toString() || "",
-      isAvailable: carData?.isAvailable || false,
-    },
-  });
-
-  const mappedForm = carRentalForm.map((car: FormProps) => (
-    <FormField
-      key={car.id}
-      control={form.control}
-      name={car.name as "title" | "manufacturer" | "description"}
-      render={({ field }) => (
-        <FormItem className="py-2 flex flex-col">
-          <FormLabel>{car.label}</FormLabel>
-          <FormControl>
-            {car.type === "text" || car.type === "number" ? (
-              <Input type={car.type} placeholder={car.placeholder} {...field} />
-            ) : car.type === "textArea" ? (
-              <Textarea placeholder={car.placeholder} {...field} />
-            ) : car.type === "radio" ? (
-              <Switch
-                checked={!!field.value}
-                onCheckedChange={field.onChange}
-              />
-            ) : null}
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-  ));
-
-  const handleSubmit = async (values: z.infer<typeof postFormSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof carFormSchema>) => {
     try {
       const { description, manufacturer, price, title, isAvailable } = values;
       const numericPrice = parseFloat(price);
@@ -122,22 +68,6 @@ export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
     return <p>Loading...</p>;
   }
 
-  const successAlert = (
-    <Alert>
-      <AlertTitle className="flex items-center gap-3">
-        <FaCircleCheck />
-        <p>Successfully updated car!</p>
-      </AlertTitle>
-    </Alert>
-  );
-  const errorAlert = (
-    <Alert variant={"destructive"}>
-      <AlertTitle className="flex items-center gap-3">
-        <MdError />
-        <p>Could not update car!</p>
-      </AlertTitle>
-    </Alert>
-  );
   return (
     <Card className="w-[400px]">
       <CardHeader>
@@ -148,7 +78,7 @@ export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <CardContent className="px-5">{mappedForm}</CardContent>
           <CardFooter className="flex flex-col items-start gap-3 px-5 pb-5">
-            <div className="flex gap-3 ">
+            <div className="flex flex-col w-full gap-3 ">
               <Button type="submit" disabled={isPending}>
                 {isPending ? (
                   <>
@@ -159,10 +89,17 @@ export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
                   "Update"
                 )}
               </Button>
-              <Button>Cancel</Button>
+              <Button variant={"secondary"}>Cancel</Button>
             </div>
-            {isError && errorAlert}
-            {isSuccess && successAlert}
+            {isError && (
+              <TheAlert type={"error"} message={"Could not update the car!"} />
+            )}
+            {isSuccess && (
+              <TheAlert
+                type={"success"}
+                message={"Successfully updated the car!"}
+              />
+            )}
           </CardFooter>
         </form>
       </Form>

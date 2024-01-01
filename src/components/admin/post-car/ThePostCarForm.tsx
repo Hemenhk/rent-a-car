@@ -1,9 +1,11 @@
 "use client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useCarForm } from "@/app/hooks/useCarForm";
 
-import React from "react";
 import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { carFormSchema } from "@/utils/form-schemas/form-schemas";
+import { CarValue, postCar } from "@/lib/car-axios";
 
 import {
   Card,
@@ -13,33 +15,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-
-import { carRentalForm } from "@/utils/form-utils";
-import { FormProps } from "@/utils/types/types";
-
-import { postFormSchema } from "@/utils/form-schemas/form-schemas";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CarValue, postCar } from "@/lib/car-axios";
-import { useRouter } from "next/navigation";
+import MoonLoader from "react-spinners/MoonLoader";
+import TheAlert from "@/app/helpers/TheAlert";
 
 export default function ThePostCarForm() {
   const router = useRouter();
   const queryClient = useQueryClient();
+
+  const { form, mappedForm } = useCarForm({});
+
   const {
     mutateAsync: createCarMutation,
-    isPaused,
+    isPending,
     isSuccess,
     isError,
   } = useMutation({
@@ -52,44 +41,7 @@ export default function ThePostCarForm() {
     },
   });
 
-  const form = useForm<z.infer<typeof postFormSchema>>({
-    resolver: zodResolver(postFormSchema),
-    defaultValues: {
-      title: "",
-      manufacturer: "",
-      description: "",
-      price: "",
-      isAvailable: false,
-    },
-  });
-
-  const mappedForm = carRentalForm.map((car: FormProps) => (
-    <FormField
-      key={car.id}
-      control={form.control}
-      name={car.name as "title" | "manufacturer" | "description"}
-      render={({ field }) => (
-        <FormItem className="pb-2">
-          <FormLabel>{car.label}</FormLabel>
-          <FormControl>
-            {car.type === "text" || car.type === "number" ? (
-              <Input type={car.type} placeholder={car.placeholder} {...field} />
-            ) : car.type === "textArea" ? (
-              <Textarea placeholder={car.placeholder} {...field} />
-            ) : car.type === "radio" ? (
-              <Switch
-                checked={!!field.value}
-                onCheckedChange={field.onChange}
-              />
-            ) : null}
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-  ));
-
-  const handleSubmit = async (values: z.infer<typeof postFormSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof carFormSchema>) => {
     try {
       const { description, manufacturer, price, title, isAvailable } = values;
       const numericPrice = parseFloat(price);
@@ -116,9 +68,29 @@ export default function ThePostCarForm() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <CardContent className="px-5">{mappedForm}</CardContent>
-          <CardFooter className="flex gap-3 pl-5 pb-5">
-            <Button type="submit">Create</Button>
-            <Button>Cancel</Button>
+          <CardFooter className="flex gap-3 px-5 pb-5">
+            <div className="flex flex-col w-full gap-3 ">
+              <Button type="submit" disabled={isPending}>
+                {isPending ? (
+                  <>
+                    <MoonLoader />
+                    Creating
+                  </>
+                ) : (
+                  "Create"
+                )}
+              </Button>
+              <Button variant={"secondary"}>Cancel</Button>
+            </div>
+            {isError && (
+              <TheAlert type={"error"} message={"Could not create the car!"} />
+            )}
+            {isSuccess && (
+              <TheAlert
+                type={"success"}
+                message={"Successfully created the car!"}
+              />
+            )}
           </CardFooter>
         </form>
       </Form>
