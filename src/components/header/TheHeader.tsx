@@ -21,7 +21,7 @@ export default function TheHeader() {
           </div>
         </header>
       ) : (
-        <header className="w-full h-10 py-5">
+        <header className="w-full">
           <div className="flex md:hidden">
             <TheMobileNavbar homePage={homePage}/>
           </div>

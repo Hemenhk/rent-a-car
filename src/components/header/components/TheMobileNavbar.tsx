@@ -3,7 +3,7 @@ import { IoBagHandleOutline } from "react-icons/io5";
 import TheMobileNavLinks from "./navlinks/TheMobileNavLinks";
 
 type TNavBar = {
-  homePage: boolean;
+  homePage: boolean
 };
 export default function TheMobileNavbar({ homePage }: TNavBar) {
   return (
