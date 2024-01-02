@@ -89,7 +89,7 @@ export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
                   "Update"
                 )}
               </Button>
-              <Button variant={"secondary"}>Cancel</Button>
+              <Button onClick={() => router.push("/admin")} variant={"secondary"}>Cancel</Button>
             </div>
             {isError && (
               <TheAlert type={"error"} message={"Could not update the car!"} />

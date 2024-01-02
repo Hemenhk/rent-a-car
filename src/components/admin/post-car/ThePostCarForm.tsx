@@ -53,7 +53,7 @@ export default function ThePostCarForm() {
         isAvailable,
       });
       setTimeout(() => {
-        router.push("/cars");
+        router.push("/admin");
       }, 1500);
     } catch (error) {
       console.log("could not create car", error);
@@ -80,7 +80,7 @@ export default function ThePostCarForm() {
                   "Create"
                 )}
               </Button>
-              <Button variant={"secondary"}>Cancel</Button>
+              <Button onClick={() => router.push("/admin")} variant={"secondary"}>Cancel</Button>
             </div>
             {isError && (
               <TheAlert type={"error"} message={"Could not create the car!"} />

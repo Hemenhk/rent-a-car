@@ -4,6 +4,7 @@ import "./globals.css";
 import TheHeader from "@/components/header/TheHeader";
 import ReactQueryProvider from "./context/tanstack-client";
 import NextAuthProvider from "./context/next-auth";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +25,7 @@ export default function RootLayout({
           <ReactQueryProvider>
             <TheHeader />
             {children}
+            <Toaster />
           </ReactQueryProvider>
         </NextAuthProvider>
       </body>
