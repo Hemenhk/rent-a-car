@@ -9,13 +9,13 @@ import { SlOptionsVertical } from "react-icons/sl";
 import { IoCreateOutline } from "react-icons/io5";
 import TheDeleteCar from "./delete-car/TheDeleteCar";
 
-type PopoverProps = { carId: string };
+type PopoverProps = { carId: string | undefined };
 
 export default function ThePopover({ carId }: PopoverProps) {
 
   return (
     <Popover>
-      <PopoverTrigger className="text-violet-950">
+      <PopoverTrigger className="text-violet-100  p-1 rounded-[50%] transition ease-out duration-300 hover:bg-violet-300 hover:text-violet-600">
         <SlOptionsVertical />
       </PopoverTrigger>
       <PopoverContent className="w-32">

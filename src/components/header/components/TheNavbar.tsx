@@ -20,7 +20,7 @@ export default function TheNavbar({ homePage }: TNavBar) {
         Rent a car
       </h1>
       <nav className={`${homePage ? "text-white" : "text-black"}`}>
-        <TheNavLinks />
+        <TheNavLinks homePage={homePage} />
       </nav>
       {adminSession ? (
         <TheAdminButtons />

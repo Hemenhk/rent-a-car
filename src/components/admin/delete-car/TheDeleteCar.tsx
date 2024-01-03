@@ -4,7 +4,7 @@ import { deleteCar } from "@/lib/car-axios";
 
 import { IoTrashOutline } from "react-icons/io5";
 
-export default function TheDeleteCar({ carId }: { carId: string }) {
+export default function TheDeleteCar({ carId }: { carId: string | undefined }) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -27,7 +27,7 @@ export default function TheDeleteCar({ carId }: { carId: string }) {
       await deleteCarMutation();
       toast({
         title: "Car was deleted!",
-        description: Date.now(),
+        description: new Date().toDateString(),
         variant: "destructive",
       });
     } catch (error) {

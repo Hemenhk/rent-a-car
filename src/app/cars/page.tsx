@@ -24,7 +24,7 @@ export default function AllCarsPage() {
 
   console.log("cars", cars);
 
-  const mappedCars = cars?.map((car: CarValue) => (
+  const mappedCars = cars && cars.length > 0 && cars?.map((car: CarValue) => (
     <li key={car._id}>
       <Card>
         <CardContent>

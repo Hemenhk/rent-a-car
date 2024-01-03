@@ -21,6 +21,9 @@ import { Button } from "@/components/ui/button";
 import { MoonLoader } from "react-spinners";
 
 import TheAlert from "@/app/helpers/TheAlert";
+import useImageUpload from "@/app/hooks/useImageUpload";
+import { Label } from "@radix-ui/react-label";
+import { Input } from "@/components/ui/input";
 
 export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
   const router = useRouter();
@@ -32,6 +35,7 @@ export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
   });
 
   const { form, mappedForm } = useCarForm({ carData });
+  const { imageUpload, setFile } = useImageUpload();
 
   const {
     mutateAsync: updateMutation,
@@ -50,15 +54,21 @@ export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
 
   const handleSubmit = async (values: z.infer<typeof carFormSchema>) => {
     try {
+      const imageURL = await imageUpload();
       const { description, manufacturer, price, title, isAvailable } = values;
       const numericPrice = parseFloat(price);
+
       await updateMutation({
         description,
         manufacturer,
         price: numericPrice,
         title,
         isAvailable: isAvailable,
+        imageCover: imageURL,
       });
+      setTimeout(() => {
+        router.push("/admin");
+      }, 1500);
     } catch (error) {
       console.log("could not create car", error);
     }
@@ -76,7 +86,16 @@ export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
-          <CardContent className="px-5">{mappedForm}</CardContent>
+          <CardContent className="px-5">
+            {" "}
+            {mappedForm} <Label htmlFor="imageCover">Image Cover</Label>
+            <Input
+              type="file"
+              id="imageCover"
+              accept="image/png, image/jpeg, image/jpg"
+              onChange={(e) => setFile(e.target.files?.[0])}
+            />
+          </CardContent>
           <CardFooter className="flex flex-col items-start gap-3 px-5 pb-5">
             <div className="flex flex-col w-full gap-3 ">
               <Button type="submit" disabled={isPending}>
@@ -89,7 +108,12 @@ export default function TheEditCarForm({ editCarId }: { editCarId: string }) {
                   "Update"
                 )}
               </Button>
-              <Button onClick={() => router.push("/admin")} variant={"secondary"}>Cancel</Button>
+              <Button
+                onClick={() => router.push("/admin")}
+                variant={"secondary"}
+              >
+                Cancel
+              </Button>
             </div>
             {isError && (
               <TheAlert type={"error"} message={"Could not update the car!"} />
