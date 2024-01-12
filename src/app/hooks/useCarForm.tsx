@@ -19,7 +19,7 @@ import { FormProps } from "@/utils/types/types";
 import { CarValue } from "@/lib/car-axios";
 
 type CarFormProps = {
-  carData?: CarValue | undefined
+  carData?: CarValue | undefined;
 };
 
 export const useCarForm = ({ carData }: CarFormProps) => {
@@ -31,6 +31,7 @@ export const useCarForm = ({ carData }: CarFormProps) => {
       description: carData?.description || "",
       price: carData?.price?.toString() || "",
       isAvailable: carData?.isAvailable || false,
+      imageCover: carData?.imageCover?.toString() || "",
     },
   });
 

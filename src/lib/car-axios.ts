@@ -1,11 +1,11 @@
 import axios from "axios";
 
 export interface CarValue {
-  title?: string;
-  manufacturer?: string;
-  price?: number;
-  description?: string;
-  imageCover?: string;
+  title: string;
+  manufacturer: string;
+  price: number;
+  description: string;
+  imageCover: string;
   isAvailable?: boolean;
   _id?: string;
 }
@@ -21,9 +21,10 @@ export interface SingleCarValues {
 export const fetchAllCars = async () => {
   try {
     const res = await axios.get<CarValues>("/api/cars");
-    return res.data.cars;
+    return res.data.cars || [];
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
 
@@ -34,6 +35,7 @@ export const fetchCarById = async (id: string) => {
     return res.data.car;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
 
