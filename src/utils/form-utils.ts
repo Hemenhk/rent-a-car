@@ -50,7 +50,7 @@ export const carRentalForm = [
   {
     id: "manufacturer",
     label: "Manufacturer",
-    type: "text",
+    type: "select",
     placeholder: "Manufacturer",
     name: "manufacturer",
   },
